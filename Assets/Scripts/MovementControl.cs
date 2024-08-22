@@ -13,7 +13,7 @@ public class MovementControl : MonoBehaviour
     private List<GameObject> BodyParts = new List<GameObject>();
     public GameObject bodyPartPrefab;
     public Transform bodyTransform;
-    
+   
 
     void Awake()
     {
@@ -22,11 +22,6 @@ public class MovementControl : MonoBehaviour
         gridMoveDirection = new Vector2Int(1,0);
     }
 
-    void Start()
-    {
-       
-        
-    }
     void Update()
     {
        HandleInput();
@@ -77,7 +72,7 @@ public class MovementControl : MonoBehaviour
         gridMoveTimer += Time.deltaTime;
         if (gridMoveTimer > gridMoveTimerMax)
         {
-            gridPosition += gridMoveDirection * 8;
+            gridPosition += gridMoveDirection * 5;
             gridMoveTimer -= gridMoveTimerMax;
             
             for (int i = BodyParts.Count - 1; i > 0; i--)
@@ -91,12 +86,16 @@ public class MovementControl : MonoBehaviour
        
     }
 
-   
-    public void bodyGrowth()
+    [ContextMenu("bodyGrowth")]
+    public void GrowBody()
     {
-        GameObject newBodypart = Instantiate(bodyPartPrefab, transform.position,
+        GameObject newBodypart = Instantiate(bodyPartPrefab, BodyParts[BodyParts.Count - 1].transform.position * 5,
                                              transform.rotation);
         BodyParts.Add(newBodypart);
-        
+    }
+
+    public int GetBodyLength()
+    {
+        return BodyParts.Count;
     }
 }

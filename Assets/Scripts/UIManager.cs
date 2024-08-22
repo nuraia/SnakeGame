@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static UIManager instance;
+    public TextMeshProUGUI scoreText;
     void Start()
     {
-        
+        if(instance == null)
+            instance = this;
+        else Destroy(instance);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetScore(int point)
     {
-        
+        scoreText.text = "Score :" + point;
     }
+   
 }

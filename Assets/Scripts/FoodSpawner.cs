@@ -11,32 +11,31 @@ public class FoodSpawner : MonoBehaviour
     public float xRangeEnd = 75f;
     public float yRangeEnd = 40f;
 
-    Vector3 randomPosition;
+  
     GameObject instantiatedFood;
     void Start()
     {
-        StartCoroutine(foodSpawning());
+        foodSpawning();
     }
-
-    IEnumerator foodSpawning()
+    [ContextMenu("foodSpawning")]
+    public void foodSpawning()
     {
-        Destroy(instantiatedFood);
-        randomPosition = new Vector3((int)Random.Range(xRangeStart, xRangeEnd),
+      
+        var randomPosition = new Vector3((int)Random.Range(xRangeStart, xRangeEnd),
                     (int)Random.Range(yRangeStart, yRangeEnd), 0);
 
-        while (Physics2D.Raycast(randomPosition, Vector2.up).collider != null)
+        var bodyPart = Physics2D.OverlapPoint(randomPosition);
+        
+        while (bodyPart != null)
         {
-            //Debug.Log($"Found an object - distance: \" + {Physics2D.Raycast(randomPosition, Vector2.up).point}");
+            Debug.Log(bodyPart);
             randomPosition = new Vector3((int)Random.Range(xRangeStart, xRangeEnd),
                (int)Random.Range(yRangeStart, yRangeEnd), 0);
+            bodyPart = Physics2D.OverlapPoint(randomPosition);
 
         }
         instantiatedFood = Instantiate(foodPrefab, randomPosition, Quaternion.identity);
-        yield return new WaitForSeconds(20);
-        StartCoroutine(foodSpawning());
+        
     }
-    public void NewFoodSpawn()
-    {
-        StartCoroutine(foodSpawning());
-    }
+    
 }
