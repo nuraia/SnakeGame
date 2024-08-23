@@ -1208,6 +1208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 346393678}
+  nameText: {fileID: 0}
+  inputField: {fileID: 0}
 --- !u!4 &1647216341
 Transform:
   m_ObjectHideFlags: 0
@@ -1382,7 +1384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f7f25eb0964ad45818887071320993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridMoveTimerMax: 0.5
+  gridMoveTimerMax: 0.3
   BodyParts:
   - {fileID: 1335047871}
   bodyPartPrefab: {fileID: 6355090163244743993, guid: d114a8bebc50e854aba896010beaa45d, type: 3}

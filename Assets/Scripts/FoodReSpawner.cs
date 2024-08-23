@@ -19,6 +19,7 @@ public class FoodReSpawner : MonoBehaviour
             Destroy(col.gameObject);
             Point += 10;
             UIManager.instance.SetScore(Point);
+            GameDataManager.Instance.playerScore = Point;
             movementControler.GrowBody();
             int count = movementControler.GetBodyLength();
             if (count < 100) foodSpawner.foodSpawning();
@@ -26,4 +27,6 @@ public class FoodReSpawner : MonoBehaviour
         }
 
     }
+
+    
 }
