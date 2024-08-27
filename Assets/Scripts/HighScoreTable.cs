@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using Newtonsoft.Json;
+using System.IO;
 
 
 
@@ -9,46 +12,97 @@ using TMPro;
 public class HighScoreTable : MonoBehaviour
 {
     private const int MaxHighScores = 5;
-    private List<int> highScores = new List<int>();
-    int count = 0;
-    bool IsUpdated = false;
+    private const string fileName = "highscores.json";
+    public HighScoreData highScoreData = new HighScoreData();
+    public GameObject entryPrefab;
+    public Transform entryContainer;
 
     void Start()
     {
-
-        if (!PlayerPrefs.HasKey("HighScore1")) PlayerPrefs.SetInt("HighScore1", 0);
-        else if (!PlayerPrefs.HasKey("HighScore2")) PlayerPrefs.SetInt("HighScore2", 0);
-        else if (!PlayerPrefs.HasKey("HighScore3")) PlayerPrefs.SetInt("HighScore3", 0);
-        else if (!PlayerPrefs.HasKey("HighScore4")) PlayerPrefs.SetInt("HighScore4", 0);
-        else if (!PlayerPrefs.HasKey("HighScore5")) PlayerPrefs.SetInt("HighScore5", 0);
-        //PrintHighScores();
+        //Debug.Log($"Persistent Data Path: {Application.persistentDataPath}");
+        LoadHighScores();
+        PrintHighScores();
+        VeiwUITable();
     }
 
  
-    public void CompareTotalScore(int TotalScore)
+    public void CompareTotalScore(string playerName, int totalScore)
     {
-        for (int i = 1; i <= MaxHighScores; i++)
+        LoadHighScores();
+        HighScoreEntry newEntry = new HighScoreEntry { playerName = playerName, score = totalScore };
+        highScoreData.highScores.Add(newEntry);
+
+        //sort
+        highScoreData.highScores.Sort((x, y) => y.score.CompareTo(x.score));
+
+        
+
+        if (highScoreData.highScores.Count > MaxHighScores)
         {
-            if (PlayerPrefs.GetInt($"HighScore{i}") <= TotalScore)
-            {
-                int temp = PlayerPrefs.GetInt($"HighScore{i}");
-                PlayerPrefs.SetInt($"HighScore{i}", TotalScore);
-                TotalScore = temp;
-            }
+            highScoreData.highScores.RemoveRange(MaxHighScores, highScoreData.highScores.Count - MaxHighScores);
         }
+        SaveHighScores();
+        PrintHighScores();
+        //VeiwUITable();
 
-  
-        
-            PrintHighScores();
-        
 
+    }
+    private void LoadHighScores()
+    {
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+        //Debug.Log($"Loading high scores from: {path}"); // Debug log for path
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            highScoreData = JsonConvert.DeserializeObject<HighScoreData>(json);
+        }
+        else
+        {
+            Debug.Log("no File");
+        }
+    }
+    private void SaveHighScores()
+    {
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+       //Debug.Log($"Saving high scores to: {path}");
+        string json = JsonConvert.SerializeObject(highScoreData, Formatting.Indented);
+        File.WriteAllText(path, json);
+      
+    }
+    public void VeiwUITable()
+    {
+        LoadHighScores();
+      
+        for (int i = 0; i < highScoreData.highScores.Count; i++)
+        {
+            
+            var instantiatedEntry = Instantiate(entryPrefab, entryContainer);
+            var entryChildren = instantiatedEntry.GetComponentsInChildren<TextMeshProUGUI>();
+            entryChildren[0].text = $"{i + 1}"; // Rank
+            entryChildren[1].text = $"{highScoreData.highScores[i].playerName}"; // Player Name
+            entryChildren[2].text = $"{highScoreData.highScores[i].score}"; // Score
+        }
+       
     }
     void PrintHighScores()
     {
-       
-        for (int i = 1; i <= MaxHighScores; i++)
+        LoadHighScores();
+        for (int i = 0; i < highScoreData.highScores.Count; i++)
         {
-            Debug.Log($"HighScore{i}: {PlayerPrefs.GetInt($"HighScore{i}")}");
+            Debug.Log($"HighScore{i + 1}: {highScoreData.highScores[i].playerName} - {highScoreData.highScores[i].score}");
         }
+    }
+
+    [System.Serializable]
+    public class HighScoreEntry
+    {
+        public string playerName;
+        public int score;
+    }
+
+    [System.Serializable]
+    public class HighScoreData
+    {
+        public List<HighScoreEntry> highScores = new List<HighScoreEntry>();
     }
 }

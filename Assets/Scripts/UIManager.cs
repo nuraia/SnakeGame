@@ -39,6 +39,10 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void OnHighScoreClick()
+    {
+            SceneManager.LoadScene(1);
+    }
     public void SetScore(int point)
     {
         scoreText.text = "Score :" + point;

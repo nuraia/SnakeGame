@@ -24,9 +24,11 @@ public class MovementControl : MonoBehaviour
 
     void Update()
     {
-       HandleInput();
-       HandleGridmovement();
-       
+        if (GameDataManager.Instance.IsMoving)
+        {
+            HandleInput();
+            HandleGridmovement();
+        }
     }
 
     void HandleInput()

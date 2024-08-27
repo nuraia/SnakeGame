@@ -9,7 +9,7 @@ public class GameDataManager : MonoBehaviour
     public string playerName;
     public int playerScore;
     public int TotalScore = 0;
-
+    public bool IsMoving = true;
     void Awake()
     {
         if (Instance == null)
@@ -35,8 +35,8 @@ public class GameDataManager : MonoBehaviour
     {
         TotalScore = playerScore;
         HighScoreTable highScoreTable = new HighScoreTable();
-        highScoreTable.CompareTotalScore(TotalScore);
-
+        highScoreTable.CompareTotalScore(playerName, TotalScore);
+        //highScoreTable.VeiwUITable();
 
     }
 }
