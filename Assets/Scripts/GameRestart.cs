@@ -26,6 +26,6 @@ public class GameRestart : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         cameraShake.StopShake();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

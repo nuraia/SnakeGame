@@ -8,6 +8,6 @@ public class RestartButton : MonoBehaviour
     public void OnClick()
     {
         GameDataManager.Instance.IsMoving = true;
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(0);
     }
 }

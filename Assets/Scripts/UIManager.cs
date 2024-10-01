@@ -36,12 +36,12 @@ public class UIManager : MonoBehaviour
   
     public void OnClick()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void OnHighScoreClick()
     {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
     }
     public void SetScore(int point)
     {
